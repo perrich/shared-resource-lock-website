@@ -1,3 +1,5 @@
 {
-	"logfile": "log.txt"
+	"logfile": "log.txt",
+	"WS_refreshDelayMs": 5000,
+	"WS_baseUrl": "/router.php/resources"
 }

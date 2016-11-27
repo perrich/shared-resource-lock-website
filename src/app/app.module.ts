@@ -11,15 +11,16 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 
-import { NgModule }      from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
-import { HttpModule }    from '@angular/http';
-import { Ng2Webstorage } from 'ng2-webstorage';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { BrowserModule }             from '@angular/platform-browser';
+import { FormsModule }               from '@angular/forms';
+import { HttpModule }                from '@angular/http';
+import { Ng2Webstorage }             from 'ng2-webstorage';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 
 import { AppRoutingModule } from './app-routing.module';
 
+import { Config } from './config'
 import { ResourceService }  from './resource.service';
 import { UserService }  from './user.service';
 
@@ -45,7 +46,12 @@ import { UserFormComponent }   from './user-form.component';
   ],
   providers: [ 
     ResourceService,
-    UserService
+    UserService,
+    Config,
+    { provide: APP_INITIALIZER,
+      useFactory: (config: Config) => () => config.load(),
+      deps: [Config],
+      multi: true }
   ],
   bootstrap: [ AppComponent ]
 })

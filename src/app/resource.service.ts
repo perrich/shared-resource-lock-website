@@ -11,22 +11,25 @@ import { Observable }              from 'rxjs/Observable';
 import { BehaviorSubject }         from 'rxjs/BehaviorSubject';
 import { Subject }                 from 'rxjs/Subject';
 
+import { Config }   from './config'
 import { Resource } from './resource';
 
 @Injectable()
 export class ResourceService {
 
   private headers = new Headers({'Content-Type': 'application/json'});
-  private url = 'router.php/resources';  // URL to web api
+  private url: string;
 
   private resources: Resource[];
   private observable: Observable<any>;
 
   dataChange: Subject<string> = new Subject<string>();
 
-  constructor(private http: Http) {
-    // Refresh cache every 5s if something has changed
-    Observable.timer(0, 5000)
+  constructor(private http: Http, private config:Config) {
+    this.url = config.get('WS_baseUrl');  // URL to web api
+    
+    // Refresh cache every x milliseconds if something has changed
+    Observable.timer(0, config.get('WS_refreshDelayMs'))
       .subscribe((x) => {
         this.fillCache().subscribe(a => a);
       });
@@ -65,8 +68,8 @@ export class ResourceService {
             return this.manageUpdateResponse(response);
           }
           
-          return false;        
-        }).share();     
+          return false;
+        }).share();
   }
 
   private fillCache() : Observable<Resource[]> {
@@ -79,7 +82,7 @@ export class ResourceService {
           this.resources = this.convert(response.json());
           this.dataChange.next("resources");
           return this.resources;
-        }          
+        }
       })
       .catch(error => this.handleError(error))
       .share();

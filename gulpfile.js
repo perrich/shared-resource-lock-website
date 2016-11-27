@@ -89,7 +89,7 @@ gulp.task('test', ['test-run'], () => {
 });
 
 gulp.task('watch', () => {
-  var watchTs = gulp.watch(config.root + 'app/**/**.ts', ['system-build']),
+  var watchTs = gulp.watch(config.root + 'app/**/**.ts', ['dev-ts']),
     watchCss = gulp.watch(config.root + 'css/**/*.css', ['css']),
     watchHtml = gulp.watch(config.root + '**/*.html', ['html']),
     watchImages = gulp.watch(config.root + 'images/**/*.*', ['images']),
@@ -138,7 +138,7 @@ gulp.task('build', function(cb) {
 });
 
 
-gulp.task('copy-dev-source', () => {
+gulp.task('dev-ts', ['system-build'], () => {
   return gulp.src(config.root + '/**/*.ts')
     .pipe(gulp.dest(config.dev + '/' + config.root));
 });
@@ -169,7 +169,7 @@ gulp.task('dist', ['build'], function(cb) {
 
 
 gulp.task('dev', ['build'], function(cb) {  
-  runSequence('copy-dev-source', 'watch', cb);
+  runSequence('dev-ts', 'watch', cb);
 });
 
 gulp.task('serve', ['dev', 'watch'], function () {
