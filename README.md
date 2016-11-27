@@ -29,5 +29,6 @@ You only need 4 steps :
  * _app_
  * _dist_
  * _vendor_
-2. modify the _app/db.json_ file
-3. that's all!
+2. modify the _app/config.json_ file
+3. _dist_ should be the web site root directory
+4. that's all!
