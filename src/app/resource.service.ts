@@ -61,7 +61,7 @@ export class ResourceService {
   }
 
   update(resource: Resource): Observable<boolean> {
-    const url = `${this.url}/${resource.type}/${resource.name}`;
+    const url = this.url + '/' + resource.id;
     return this.http.put(url, JSON.stringify(resource), {headers: this.headers})
         .map((response: Response) => {
           if (response.status == 200) {

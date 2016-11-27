@@ -46,8 +46,10 @@ export class ResourceDetailComponent implements OnInit, OnDestroy {
 
     if (user != null) {
       let resource = new Resource();
+      resource.id = this.id;
       resource.type = this.resource.type;
       resource.name = this.resource.name;
+      resource.description = this.resource.description;
       resource.comment = this.input.nativeElement.value;
       resource.user = user.name;
       resource.date = new Date();
@@ -58,8 +60,10 @@ export class ResourceDetailComponent implements OnInit, OnDestroy {
 
   free(): void {
     let resource = new Resource();
+    resource.id = this.id;
     resource.type = this.resource.type;
     resource.name = this.resource.name;
+    resource.description = this.resource.description;
     resource.user = null;
     resource.date = null;
     resource.comment = null;

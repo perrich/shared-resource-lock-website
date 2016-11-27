@@ -17,7 +17,7 @@ class RouteDataProvider
 	private function addRoutes($routeCollector)
 	{
 		$routeCollector->get('/resources/', ['\\Perrich\\Controllers\\ResourceController','getResources']);
-		$routeCollector->put('/resources/{type}/{name}', ['\\Perrich\\Controllers\\ResourceController','updateResource']);
+		$routeCollector->put('/resources/{id}', ['\\Perrich\\Controllers\\ResourceController','updateResource']);
 	}
 	
 	/**

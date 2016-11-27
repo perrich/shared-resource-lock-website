@@ -37,13 +37,12 @@ class DataRepository
 	/**
 	 * Get a resource
 	 *
-	 * @param $type The resource type
-	 * @param $name The resource name
+	 * @param $id The resource identifier
 	 * @return Resource
 	 */
-	public function getResource($type, $name) {
+	public function getResource($id) {
 		foreach ($this->resources as $r){
-			if ($r->type == $type && $r->name == $name) {
+			if ($r->id == $id) {
 				return $r;
 			}
 		}

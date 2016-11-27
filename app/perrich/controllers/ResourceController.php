@@ -21,7 +21,7 @@ class ResourceController extends Controller
 		return HttpHelper::jsonContent($repository->getResources());
 	}
 	
-	public function updateResource($type, $name)
+	public function updateResource($id)
   {
 		$parameters = HttpHelper::getParameters();
 
@@ -37,18 +37,18 @@ class ResourceController extends Controller
 		$repository = new DataRepository($locker->getHandle());
 		$repository->load();
 
-		$resource = $repository->getResource($type, $name);
+		$resource = $repository->getResource($id);
 		if ($resource === null) {
 			$locker->unlock();
 			return ResourceController::defineErrorMessage('Unknown resource"}');
 		}
 
-		if ($resource->user !== null && $parameters['user'] !== null) {
+		if ($resource->user !== null && isset($parameters['user'])) {
 			$locker->unlock();
 			return ResourceController::defineErrorMessage('Resource is already hold');
 		}
 		
-		if ($resource->user === null && $parameters['user'] === null) {
+		if ($resource->user === null && !isset($parameters['user'])) {
 			$locker->unlock();
 			return ResourceController::defineErrorMessage('Resource is not hold');
 		}
