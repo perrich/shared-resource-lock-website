@@ -1,0 +1,21 @@
+<h2><i class="fa fa-television" aria-hidden="true"></i>Dashboard</h2>
+<div class="dashboard">
+  <div class="type-part">
+    <h3>Type:</h3>
+    <ul class="type-container">
+      <li *ngFor="let type of types" (click)="onSelect(type)" [ngClass]="getTypeClass(type)">
+        <i class="fa fa-cubes" aria-hidden="true"></i> {{type.name}}
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="hasSelection()" class="resource-part">
+    <h3>Resources for {{selectedTypeName}}:</h3>
+    <div class="resource-container">
+      <a *ngFor="let resource of resources" [routerLink]="['/detail', resource.id]">
+        <div class="resource" [class.resource-hold]="isHold(resource)">
+          <i class="fa fa-cube" aria-hidden="true"></i> {{resource.name}}
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

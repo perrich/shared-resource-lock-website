@@ -1,0 +1,39 @@
+[
+	{
+		"type": "Type 1",
+		"name": "resource #1",
+		"user": null,
+		"date": null
+	},
+	{
+		"type": "Type 1",
+		"name": "resource #2",
+		"user": null,
+		"date": null
+	},
+	{	
+		"type": "Type 1",
+		"name": "resource #3",
+		"user": null,
+		"date": null
+	},
+	{
+		"type": "Type 2",
+		"name": "admin resource",
+		"user": null,
+		"date": null
+	},
+	{
+		"type": "Type 2",
+		"name": "user resource",
+		"user": null,
+		"date": null
+	},
+	{
+		"type": "Type 3",
+		"name": "My resource",
+        "description": "Sample of a resource description...",
+		"user": null,
+		"date": null
+	}
+]

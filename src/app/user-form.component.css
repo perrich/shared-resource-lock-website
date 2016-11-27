@@ -1,0 +1,28 @@
+.user-form input {
+  height: 20px;
+  padding: 10px;
+  border: 0;
+  transition: 0.3s;
+  font-size: 100%;
+}
+
+.user-form input:focus
+{
+  background-color: #cef;
+  border: 0;
+}
+
+.user-form button {
+  font-family: Arial;
+  background-color: #eee;
+  border: none;
+  padding: 10px 10px;  
+  font-size: 120%;
+  border-radius: 4px;
+  cursor: pointer; cursor: hand;
+  transition-duration: 0.3s;
+}
+
+.user-form button:hover {
+  background-color: #69c;
+}

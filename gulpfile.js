@@ -1,0 +1,177 @@
+'use strict';
+/*
+based on https://github.com/kiswa/angular2-base and http://www.greggbolinger.com/angular2-gulp-build/
+*/
+var gulp = require('gulp'),
+  del = require('del'),
+  merge = require('merge-stream'),
+
+  tsc = require('gulp-typescript'),
+  tsProject = tsc.createProject('tsconfig.json'),
+  SystemBuilder = require('systemjs-builder'),
+  jsMinify = require('gulp-uglify'),
+
+  mocha = require('gulp-mocha'),
+  concat = require('gulp-concat'),
+  imagemin = require('gulp-imagemin'),
+  runSequence = require('run-sequence'),
+  sourcemaps = require('gulp-sourcemaps'),
+
+  cssPrefixer = require('gulp-autoprefixer'),
+  cssMinify = require('gulp-cssnano');
+
+var browserSync = require("browser-sync").create();
+var config = require('./gulp.config.js')();
+
+gulp.task('clean', () => {
+  return del(config.dev);
+});
+
+gulp.task('shims', () => {
+  return gulp.src([
+    'node_modules/core-js/client/shim.js',
+    'node_modules/zone.js/dist/zone.js',
+    'node_modules/reflect-metadata/Reflect.js'
+  ])
+    .pipe(concat('shims.js'))
+    .pipe(gulp.dest(config.dev + '/js/'));
+});
+
+gulp.task('system-build', ['tsc'], () => {
+  var builder = new SystemBuilder();
+
+  return builder.loadConfig('systemjs.config.js')
+    .then(() => builder.buildStatic('app', config.dev + '/js/bundle.js', { sourceMaps: true }))
+    .then(() => del(config.temp));
+});
+
+gulp.task('tsc', () => {
+  del(config.temp);
+
+var tsResult = gulp.src(config.root + 'app/**/*.ts')
+    .pipe(sourcemaps.init())
+    .pipe(tsProject());
+  return tsResult.js
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(config.temp));
+});
+
+gulp.task('html', () => {
+  return gulp.src([config.root + '**/**.html', config.root + 'favicon.png'])
+    .pipe(gulp.dest(config.dev));
+});
+
+gulp.task('images', () => {
+  return gulp.src(config.root + 'images/**/*.*')
+    .pipe(imagemin())
+    .pipe(gulp.dest(config.dev + '/images/'));
+});
+
+gulp.task('css', () => {
+  return gulp.src(config.root + '**/*.css')
+    .pipe(cssPrefixer())
+    .pipe(gulp.dest(config.dev));
+});
+
+gulp.task('php', () => {
+  return gulp.src(config.root + '**/*.php')
+    .pipe(imagemin())
+    .pipe(gulp.dest(config.dev));
+});
+
+gulp.task('test-run', ['tsc'], () => {
+  return gulp.src(config.root + 'test/**/*.spec.js')
+    .pipe(mocha());
+});
+
+gulp.task('test', ['test-run'], () => {
+  return del(config.temp);
+});
+
+gulp.task('watch', () => {
+  var watchTs = gulp.watch(config.root + 'app/**/**.ts', ['system-build']),
+    watchCss = gulp.watch(config.root + 'css/**/*.css', ['css']),
+    watchHtml = gulp.watch(config.root + '**/*.html', ['html']),
+    watchImages = gulp.watch(config.root + 'images/**/*.*', ['images']),
+    watchPhp = gulp.watch(config.root + '**/*.php', ['php']),
+
+    onChanged = function (event) {
+      console.log('File ' + event.path + ' was ' + event.type + '. Running tasks...');
+      browserSync.reload;
+    };
+
+  watchTs.on('change', onChanged);
+  watchCss.on('change', onChanged);
+  watchHtml.on('change', onChanged);
+  watchImages.on('change', onChanged);
+  watchPhp.on('change', onChanged);
+});
+
+gulp.task('watchtests', () => {
+  var watchTs = gulp.watch(config.root + 'app/**/**.ts', ['test-run']),
+    watchTests = gulp.watch(config.root + 'test/**/*.spec.js', ['test-run']),
+
+    onChanged = function (event) {
+      console.log('File ' + event.path + ' was ' + event.type + '. Running tasks...');
+    };
+
+  watchTs.on('change', onChanged);
+  watchTests.on('change', onChanged);
+});
+
+gulp.task('build', [
+  'shims',
+  'system-build',
+  'html',
+  'images',
+  'css',
+  'php'
+]);
+
+gulp.task('build', function(cb) {  
+  runSequence('clean', ['shims',
+  'system-build',
+  'html',
+  'images',
+  'css',
+  'php'], cb);
+});
+
+
+gulp.task('copy-dev-source', () => {
+  return gulp.src(config.root + '/**/*.ts')
+    .pipe(gulp.dest(config.dev + '/' + config.root));
+});
+
+gulp.task('default', ['build']);
+
+gulp.task('copy', () => {
+  return gulp.src([config.dev + '/**/*', '!' + config.dev + '/**/*.map', '!' + config.dev + '/**/*.bak'])
+    .pipe(gulp.dest(config.dist));
+});
+
+gulp.task('minify', () => {
+  /*
+  not works for bundle.js !
+  */
+  var js = gulp.src(config.dist + '/js/shims.js')
+    .pipe(jsMinify())
+    .pipe(gulp.dest(config.dist + '/js/'));
+  var css = gulp.src(config.dist + '/css/styles.css')
+    .pipe(cssMinify())
+    .pipe(gulp.dest(config.dist + '/css/'));
+  return merge(js, css);
+});
+
+gulp.task('dist', ['build'], function(cb) {  
+  runSequence('copy', 'minify', cb);
+});
+
+
+gulp.task('dev', ['build'], function(cb) {  
+  runSequence('copy-dev-source', 'watch', cb);
+});
+
+gulp.task('serve', ['dev', 'watch'], function () {
+  browserSync.init(config.browserSync.dev);
+});

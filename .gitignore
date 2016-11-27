@@ -1,0 +1,6 @@
+/app/composer.lock
+/app/route.cache
+/vendor
+/node_modules
+/dist
+/www
