@@ -1,4 +1,5 @@
 var historyApiFallback = require('connect-history-api-fallback');
+var proxy = require('http-proxy-middleware');
 
 module.exports = function () {
     var root = 'src/';
@@ -26,14 +27,11 @@ module.exports = function () {
             port: 3000,
             server: {
                 baseDir: './' + build.dev,
-                middleware: [historyApiFallback()]
-            }
-        },
-        prod: {
-            port: 3001,
-            server: {
-                baseDir: './' + build.dist,
-                middleware: [historyApiFallback()]
+                middleware: [
+                    historyApiFallback(),
+                    proxy('/**/*.php', {target: 'http://lock.localhost/'}),
+                    proxy('/**/*.php/*', {target: 'http://lock.localhost/'})
+                ]
             }
         }
     };
