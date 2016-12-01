@@ -66,7 +66,7 @@ class ResourceController extends Controller
 	
 	private static function getLocker($needWrite)
 	{
-		$locker = new FileLocker('../app/db.json');
+		$locker = new FileLocker(__DIR__ .'/../../db.json');
 	
 		if (!$locker->isLocked()) {
 			if ($needWrite === false || $locker->lock()) {
