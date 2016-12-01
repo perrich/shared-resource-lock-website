@@ -50,6 +50,7 @@
     "gulp-cssnano": "^2.1.2",
     "gulp-html-replace": "^1.5.5",
     "gulp-imagemin": "^3.1.1",
+    "gulp-inline-ng2-template": "^4.0.0",
     "gulp-mocha": "^3.0.1",
     "gulp-sass": "^2.3.2",
     "gulp-scss-lint": "^0.4.0",

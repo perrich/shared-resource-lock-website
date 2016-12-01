@@ -16,6 +16,7 @@ var gulp = require('gulp'),
   imagemin = require('gulp-imagemin'),
   runSequence = require('run-sequence'),
   sourcemaps = require('gulp-sourcemaps'),
+  inlineNg2Template = require('gulp-inline-ng2-template'),
 
   cssPrefixer = require('gulp-autoprefixer'),
   cssMinify = require('gulp-cssnano');
@@ -48,7 +49,8 @@ gulp.task('system-build', ['tsc'], () => {
 gulp.task('tsc', () => {
   del(config.temp);
 
-var tsResult = gulp.src(config.root + 'app/**/*.ts')
+var tsResult = gulp.src(config.app + '**/*.ts')
+    .pipe(inlineNg2Template({ base: '/src' }))
     .pipe(sourcemaps.init())
     .pipe(tsProject());
   return tsResult.js
@@ -57,7 +59,7 @@ var tsResult = gulp.src(config.root + 'app/**/*.ts')
 });
 
 gulp.task('html', () => {
-  return gulp.src([config.root + '**/**.html', config.root + 'favicon.png'])
+  return gulp.src([config.root + '**/*.html', '!' + config.app + '**/*.html', config.root + 'favicon.png'])
     .pipe(gulp.dest(config.dev));
 });
 
@@ -68,7 +70,7 @@ gulp.task('images', () => {
 });
 
 gulp.task('css', () => {
-  return gulp.src(config.root + '**/*.css')
+  return gulp.src([config.root + '**/*.css', '!' + config.app + '**/*.css'])
     .pipe(cssPrefixer())
     .pipe(gulp.dest(config.dev));
 });
@@ -139,7 +141,7 @@ gulp.task('build', function(cb) {
 
 
 gulp.task('dev-ts', ['system-build'], () => {
-  return gulp.src(config.root + '/**/*.ts')
+  return gulp.src(config.app + '**/*.ts')
     .pipe(gulp.dest(config.dev + '/' + config.root));
 });
 
