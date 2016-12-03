@@ -48,6 +48,7 @@ export class ResourceDetailComponent implements OnInit, OnDestroy {
       let resource = new Resource();
       resource.id = this.id;
       resource.type = this.resource.type;
+      resource.subtype = this.resource.subtype;
       resource.name = this.resource.name;
       resource.description = this.resource.description;
       resource.comment = this.input.nativeElement.value;
@@ -62,6 +63,7 @@ export class ResourceDetailComponent implements OnInit, OnDestroy {
     let resource = new Resource();
     resource.id = this.id;
     resource.type = this.resource.type;
+    resource.subtype = this.resource.subtype;
     resource.name = this.resource.name;
     resource.description = this.resource.description;
     resource.user = null;

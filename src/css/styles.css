@@ -55,8 +55,24 @@ h2 i {
   margin-right: 20px;
 }
 
+h3 i {
+  margin-right: 15px;
+}
+
+h4 i {
+  margin-right: 10px;
+}
+
+
 h3 { 
   font-size: 16pt;
+  margin: 0;
+  margin-bottom: 15px;
+  font: Tahoma,Lucida Sans,sans-serif;
+}
+
+h4 { 
+  font-size: 13pt;
   margin: 0;
   margin-bottom: 15px;
   font: Tahoma,Lucida Sans,sans-serif;

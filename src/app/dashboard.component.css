@@ -24,6 +24,16 @@
   flex-flow: row wrap;
 }
 
+.subtype-container {
+  display: flex; 
+  flex-flow: column wrap;
+  margin-left: 10px;
+}
+
+.resource-container {
+  margin-bottom: 15px;
+}
+
 .type-part {
   border-right: 1px solid #e0e0e0;
   padding-left: 10px;

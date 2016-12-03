@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { Type }            from './type';
-import { Subscription }    from 'rxjs/Subscription';
-import { Resource }        from './resource';
+import { Type } from './type';
+import { Subtype } from './subtype';
+import { Subscription } from 'rxjs/Subscription';
+import { Resource } from './resource';
 import { ResourceService } from './resource.service';
-import { SessionStorage }  from 'ng2-webstorage';
+import { SessionStorage } from 'ng2-webstorage';
 
 @Component({
   selector: 'my-dashboard',
@@ -18,8 +19,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   @SessionStorage("DashboardSelectedTypeName")
   selectedTypeName: string | null;
-  
+
   private resources: Resource[] = [];
+  private subtypes: Subtype[] = [];
 
   constructor(private resourceService: ResourceService) { }
 
@@ -41,19 +43,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return resource.user != null;
   }
 
-  hasSelection(): boolean {
+  hasTypeSelection(): boolean {
     return this.selectedTypeName != null;
   }
 
   getTypeClass(type: Type): string[] {
     let classes: string[] = ["type"];
 
-    if (this.hasSelection() && type.name == this.selectedTypeName) {
+    if (this.hasTypeSelection() && type.name == this.selectedTypeName) {
       classes.push("type-selected");
     }
 
-    if (!type.isFree) {
-      classes.push("type-hold");
+    if (!type.hasSubType) {
+      classes.push("type-with-subtype");
     }
 
     return classes;
@@ -67,11 +69,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let resources: Resource[] = [];
     let typeNames: string[] = [];
     let types: { [id: string]: Type; } = {};
+    let subtypes: { [id: string]: Subtype; } = {};
 
     for (let resource of data) {
       if (types[resource.type] == null) {
         let type = new Type();
         type.name = resource.type;
+        type.hasSubType = false;
         type.isFree = false;
 
         types[resource.type] = type;
@@ -81,12 +85,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
         types[resource.type].isFree = true;
       }
 
-      if (this.hasSelection() && resource.type == this.selectedTypeName) {
+      if (this.hasTypeSelection() && resource.type == this.selectedTypeName) {
+        if (subtypes[resource.subtype] == null) {
+          let subtype = new Subtype();
+          subtype.name = resource.subtype;
+          subtype.isFree = false;
+
+          subtypes[resource.subtype] = subtype;
+        }
+
+        if (resource.user == null || resource.user == '') {
+          subtypes[resource.subtype].isFree = true;
+        }
+
         resources.push(resource);
       }
     }
 
     this.resources = resources;
     this.types = Object.values(types);
+    this.subtypes = Object.values(subtypes);
   }
 }

@@ -2,6 +2,7 @@
 <div *ngIf="resource" class="resource-details">
   <h3>"{{resource.name}}" details</h3>
   <div><label>Type: </label>{{resource.type}}</div>
+  <div><label>Subtype: </label>{{resource.subtype}}</div>
   <div><label>Name: </label>{{resource.name}}</div>
   <div><label>Description: </label>{{resource.description}}</div>
   <div *ngIf="resource.user"><label class="important">Used by: </label><span class="important">{{resource.user}}</span></div>

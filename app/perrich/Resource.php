@@ -18,6 +18,13 @@ class Resource implements \JsonSerializable
      * @return string
      */
     public $type;
+    
+    /**
+	 * The subtype if relevant
+	 *
+     * @return string
+     */
+    public $subtype;
 
     /**
 	 * The resource name
@@ -63,6 +70,9 @@ class Resource implements \JsonSerializable
 		    $this->id = $val->id;
         } 
 		$this->type = $val->type;
+        if (isset($val->subtype)) {
+		    $this->subtype = $val->subtype;
+        }
 		$this->name = $val->name;
 		$this->user = $val->user;
         if (isset($val->comment)) {
@@ -78,10 +88,11 @@ class Resource implements \JsonSerializable
         return [
             'id' => $this->id,
             'type' => $this->type,
+            'subtype' => isset($this->subtype) ? $this->subtype : null,
 			'name' => $this->name,
 			'user' => $this->user,
 			'description' => $this->description,
-			'comment' => $this->comment,
+			'comment' => isset($this->comment) ? $this->comment : null,
             'date' => isset($this->date) ? $this->date->format(\DateTime::ISO8601) : null
         ];
     }

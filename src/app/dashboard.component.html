@@ -8,14 +8,17 @@
       </li>
     </ul>
   </div>
-  <div *ngIf="hasSelection()" class="resource-part">
-    <h3>Resources for {{selectedTypeName}}:</h3>
-    <div class="resource-container">
-      <a *ngFor="let resource of resources" [routerLink]="['/detail', resource.id]">
-        <div class="resource" [class.resource-hold]="isHold(resource)">
-          <i class="fa fa-cube" aria-hidden="true"></i> {{resource.name}}
-        </div>
-      </a>
+  <div *ngIf="hasTypeSelection()" class="resource-part">
+    <h3><i class="fa fa-cubes" aria-hidden="true"></i>{{selectedTypeName}}:</h3>
+    <div *ngFor="let subtype of subtypes" class="subtype-container">
+      <h4 *ngIf="subtype.name">{{subtype.name}}:</h4> 
+      <div class="resource-container">
+        <a *ngFor="let resource of (resources | resource_subtype : subtype.name)" [routerLink]="['/detail', resource.id]">
+          <div class="resource" [class.resource-hold]="isHold(resource)">
+            <i class="fa fa-cube" aria-hidden="true"></i> {{resource.name}}
+          </div>
+        </a>
+      </div>
     </div>
   </div>
 </div>

@@ -24,6 +24,9 @@ import { Config } from './config'
 import { ResourceService }  from './resource.service';
 import { UserService }  from './user.service';
 
+
+import { ResourcesPipe } from './resource.pipe';
+
 import { AppComponent }  from './app.component';
 import { DashboardComponent }   from './dashboard.component';
 import { ResourceDetailComponent }   from './resource-detail.component';
@@ -39,6 +42,8 @@ import { UserFormComponent }   from './user-form.component';
     Ng2Webstorage
   ],
   declarations: [
+    ResourcesPipe,
+    
     AppComponent,
     DashboardComponent,
     ResourceDetailComponent,
