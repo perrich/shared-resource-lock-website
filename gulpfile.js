@@ -106,23 +106,28 @@ gulp.task('watch', () => {
 });
 
 gulp.task('dev-ts-reload', ['dev-ts'], (cb) => {
-    browserSync.reload;
+    browserSync.reload();
+    console.log('Reloaded');
     cb();
 });
 gulp.task('css-reload', ['css'], (cb) => {
-    browserSync.reload;
+    browserSync.reload();
+    console.log('Reloaded');
     cb();
 });
 gulp.task('html-reload', ['html'], (cb) => {
-    browserSync.reload;
+    browserSync.reload();
+    console.log('Reloaded');
     cb();
 });
 gulp.task('images-reload', ['images'], (cb) => {
-    browserSync.reload;
+    browserSync.reload();
+    console.log('Reloaded');
     cb();
 });
 gulp.task('php-reload', ['php'], (cb) => {
-    browserSync.reload;
+    browserSync.reload();
+    console.log('Reloaded');
     cb();
 });
 
