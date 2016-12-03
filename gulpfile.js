@@ -1,7 +1,4 @@
 'use strict';
-/*
-based on https://github.com/kiswa/angular2-base and http://www.greggbolinger.com/angular2-gulp-build/
-*/
 var gulp = require('gulp'),
   del = require('del'),
   merge = require('merge-stream'),
@@ -91,15 +88,14 @@ gulp.task('test', ['test-run'], () => {
 });
 
 gulp.task('watch', () => {
-  var watchTs = gulp.watch(config.root + 'app/**/**.ts', ['dev-ts']),
-    watchCss = gulp.watch(config.root + 'css/**/*.css', ['css']),
-    watchHtml = gulp.watch(config.root + '**/*.html', ['html']),
-    watchImages = gulp.watch(config.root + 'images/**/*.*', ['images']),
-    watchPhp = gulp.watch(config.root + '**/*.php', ['php']),
+  var watchTs = gulp.watch(config.root + 'app/**/**.*', ['dev-ts-reload']),
+    watchCss = gulp.watch([config.root + 'css/**/*.css', '!' + config.app + '**/*.css'], ['css-reload']),
+    watchHtml = gulp.watch([config.root + '**/*.html', '!' + config.app + '**/*.html'], ['html-reload']),
+    watchImages = gulp.watch(config.root + 'images/**/*.*', ['images-reload']),
+    watchPhp = gulp.watch(config.root + '**/*.php', ['php-reload']),
 
     onChanged = function (event) {
       console.log('File ' + event.path + ' was ' + event.type + '. Running tasks...');
-      browserSync.reload;
     };
 
   watchTs.on('change', onChanged);
@@ -107,6 +103,27 @@ gulp.task('watch', () => {
   watchHtml.on('change', onChanged);
   watchImages.on('change', onChanged);
   watchPhp.on('change', onChanged);
+});
+
+gulp.task('dev-ts-reload', ['dev-ts'], (cb) => {
+    browserSync.reload;
+    cb();
+});
+gulp.task('css-reload', ['css'], (cb) => {
+    browserSync.reload;
+    cb();
+});
+gulp.task('html-reload', ['html'], (cb) => {
+    browserSync.reload;
+    cb();
+});
+gulp.task('images-reload', ['images'], (cb) => {
+    browserSync.reload;
+    cb();
+});
+gulp.task('php-reload', ['php'], (cb) => {
+    browserSync.reload;
+    cb();
 });
 
 gulp.task('watchtests', () => {
@@ -130,7 +147,7 @@ gulp.task('build', [
   'php'
 ]);
 
-gulp.task('build', function(cb) {  
+gulp.task('build', (cb) => {  
   runSequence('clean', ['shims',
   'system-build',
   'html',
@@ -165,15 +182,15 @@ gulp.task('minify', () => {
   return merge(js, css);
 });
 
-gulp.task('dist', ['build'], function(cb) {  
+gulp.task('dist', ['build'], (cb) => {  
   runSequence('copy', 'minify', cb);
 });
 
 
-gulp.task('dev', ['build'], function(cb) {  
+gulp.task('dev', ['build'], (cb) => {  
   runSequence('dev-ts', 'watch', cb);
 });
 
-gulp.task('serve', ['dev', 'watch'], function () {
+gulp.task('serve', ['dev'], () => {
   browserSync.init(config.browserSync.dev);
 });
