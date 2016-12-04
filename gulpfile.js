@@ -21,6 +21,13 @@ var gulp = require('gulp'),
 var browserSync = require("browser-sync").create();
 var config = require('./gulp.config.js')();
 
+
+function reload(cb) {
+  browserSync.reload();
+  console.log('Reloaded');
+  cb();
+}
+
 gulp.task('clean', () => {
   return del(config.dev);
 });
@@ -46,10 +53,11 @@ gulp.task('system-build', ['tsc'], () => {
 gulp.task('tsc', () => {
   del(config.temp);
 
-var tsResult = gulp.src(config.app + '**/*.ts')
+  var tsResult = gulp.src(config.app + '**/*.ts')
     .pipe(inlineNg2Template({ base: '/src' }))
     .pipe(sourcemaps.init())
     .pipe(tsProject());
+
   return tsResult.js
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(config.temp));
@@ -105,31 +113,11 @@ gulp.task('watch', () => {
   watchPhp.on('change', onChanged);
 });
 
-gulp.task('dev-ts-reload', ['dev-ts'], (cb) => {
-    browserSync.reload();
-    console.log('Reloaded');
-    cb();
-});
-gulp.task('css-reload', ['css'], (cb) => {
-    browserSync.reload();
-    console.log('Reloaded');
-    cb();
-});
-gulp.task('html-reload', ['html'], (cb) => {
-    browserSync.reload();
-    console.log('Reloaded');
-    cb();
-});
-gulp.task('images-reload', ['images'], (cb) => {
-    browserSync.reload();
-    console.log('Reloaded');
-    cb();
-});
-gulp.task('php-reload', ['php'], (cb) => {
-    browserSync.reload();
-    console.log('Reloaded');
-    cb();
-});
+gulp.task('dev-ts-reload', ['dev-ts'], reload);
+gulp.task('css-reload', ['css'], reload);
+gulp.task('html-reload', ['html'], reload);
+gulp.task('images-reload', ['images'], reload);
+gulp.task('php-reload', ['php'], reload);
 
 gulp.task('watchtests', () => {
   var watchTs = gulp.watch(config.root + 'app/**/**.ts', ['test-run']),
@@ -152,13 +140,13 @@ gulp.task('build', [
   'php'
 ]);
 
-gulp.task('build', (cb) => {  
+gulp.task('build', (cb) => {
   runSequence('clean', ['shims',
-  'system-build',
-  'html',
-  'images',
-  'css',
-  'php'], cb);
+    'system-build',
+    'html',
+    'images',
+    'css',
+    'php'], cb);
 });
 
 
@@ -187,12 +175,12 @@ gulp.task('minify', () => {
   return merge(js, css);
 });
 
-gulp.task('dist', ['build'], (cb) => {  
+gulp.task('dist', ['build'], (cb) => {
   runSequence('copy', 'minify', cb);
 });
 
 
-gulp.task('dev', ['build'], (cb) => {  
+gulp.task('dev', ['build'], (cb) => {
   runSequence('dev-ts', 'watch', cb);
 });
 
