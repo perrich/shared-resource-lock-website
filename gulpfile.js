@@ -164,7 +164,7 @@ gulp.task('build', (cb) => {
 
 gulp.task('dev-ts', ['system-build'], () => {
   return gulp.src(config.app + '**/*.ts')
-    .pipe(gulp.dest(config.dev + '/' + config.root));
+    .pipe(gulp.dest(config.dev + '/' + config.app));
 });
 
 gulp.task('default', ['build']);
