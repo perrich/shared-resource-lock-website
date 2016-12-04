@@ -110,13 +110,13 @@ ul.type-container li.module {
 }
 
 .type-with-subtype {
-  background-color: #d0d0d0;
-  color: #000;
+  background-color: #58b;
+  color: #fff;
   cursor: default;
 }
 
 .type-selected.type-with-subtype, .type-selected.type-with-subtype:hover {
-  background-color: #404040;
+  background-color: #147;
   color: #fff;
   cursor: default;
 }
