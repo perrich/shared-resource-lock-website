@@ -103,15 +103,27 @@ ul.type-container li.module {
   border: 1px solid #e0e0e0;
 }
 
-.type-hold {
-  background-color: #9D6060;
-  color: #fff;
-}
-
 .type-selected, .type-selected:hover {
   background-color: #204D20;
   color: #fff;
   cursor: default;
+}
+
+.type-with-subtype {
+  background-color: #d0d0d0;
+  color: #000;
+  cursor: default;
+}
+
+.type-selected.type-with-subtype, .type-selected.type-with-subtype:hover {
+  background-color: #404040;
+  color: #fff;
+  cursor: default;
+}
+
+.type-hold {
+  background-color: #9D6060;
+  color: #fff;
 }
 
 .type-hold.type-selected, .type-hold.type-selected:hover {

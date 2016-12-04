@@ -3,17 +3,17 @@
   <div class="type-part">
     <h3>Type:</h3>
     <ul class="type-container">
-      <li *ngFor="let type of types" (click)="onSelect(type)" [ngClass]="getTypeClass(type)">
+      <li *ngFor="let type of dashboardData.types" (click)="onSelect(type)" [ngClass]="getTypeClass(type)">
         <i class="fa fa-cubes" aria-hidden="true"></i> {{type.name}}
       </li>
     </ul>
   </div>
   <div *ngIf="hasTypeSelection()" class="resource-part">
     <h3><i class="fa fa-cubes" aria-hidden="true"></i>{{selectedTypeName}}:</h3>
-    <div *ngFor="let subtype of subtypes" class="subtype-container">
+    <div *ngFor="let subtype of dashboardData.subtypes" class="subtype-container">
       <h4 *ngIf="subtype.name">{{subtype.name}}:</h4> 
       <div class="resource-container">
-        <a *ngFor="let resource of (resources | resource_subtype : subtype.name)" [routerLink]="['/detail', resource.id]">
+        <a *ngFor="let resource of (dashboardData.resources | resource_subtype : subtype.name)" [routerLink]="['/detail', resource.id]">
           <div class="resource" [class.resource-hold]="isHold(resource)">
             <i class="fa fa-cube" aria-hidden="true"></i> {{resource.name}}
           </div>
