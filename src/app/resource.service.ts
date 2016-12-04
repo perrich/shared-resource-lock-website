@@ -11,7 +11,7 @@ import { Observable }              from 'rxjs/Observable';
 import { BehaviorSubject }         from 'rxjs/BehaviorSubject';
 import { Subject }                 from 'rxjs/Subject';
 
-import { Config }   from './config'
+import { Config }   from './config';
 import { Resource } from './resource';
 
 @Injectable()

@@ -20,6 +20,7 @@ var gulp = require('gulp'),
 
 var browserSync = require("browser-sync").create();
 var config = require('./gulp.config.js')();
+var KarmaServer = require('karma').Server;
 
 
 function reload(cb) {
@@ -46,8 +47,7 @@ gulp.task('system-build', ['tsc'], () => {
   var builder = new SystemBuilder();
 
   return builder.loadConfig('systemjs.config.js')
-    .then(() => builder.buildStatic('app', config.dev + '/js/bundle.js', { sourceMaps: true }))
-    .then(() => del(config.temp));
+    .then(() => builder.buildStatic('app', config.dev + '/js/bundle.js', { sourceMaps: true }));
 });
 
 gulp.task('tsc', () => {
@@ -86,13 +86,19 @@ gulp.task('php', () => {
     .pipe(gulp.dest(config.dev));
 });
 
-gulp.task('test-run', ['tsc'], () => {
+gulp.task('test-run', ['tsc'], (done) => {
+  new KarmaServer({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
+  
+
   return gulp.src(config.root + 'test/**/*.spec.js')
     .pipe(mocha());
 });
 
 gulp.task('test', ['test-run'], () => {
-  return del(config.temp);
+  //return del(config.temp);
 });
 
 gulp.task('watch', () => {
@@ -140,13 +146,13 @@ gulp.task('build', [
   'php'
 ]);
 
-gulp.task('build', (cb) => {
+gulp.task('build', (done) => {
   runSequence('clean', ['shims',
     'system-build',
     'html',
     'images',
     'css',
-    'php'], cb);
+    'php'], done);
 });
 
 
