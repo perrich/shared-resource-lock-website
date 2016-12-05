@@ -30,7 +30,7 @@ function reload(cb) {
 }
 
 gulp.task('clean', () => {
-  return del(config.dev);
+  return del([config.dev, config.temp]);
 });
 
 gulp.task('shims', () => {
@@ -91,14 +91,10 @@ gulp.task('test-run', ['tsc'], (done) => {
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
   }, done).start();
-  
-
-  return gulp.src(config.root + 'test/**/*.spec.js')
-    .pipe(mocha());
 });
 
 gulp.task('test', ['test-run'], () => {
-  //return del(config.temp);
+  return del(config.temp);
 });
 
 gulp.task('watch', () => {

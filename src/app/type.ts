@@ -1,5 +1,5 @@
 export class Type {
   name: string;
-  hasSubType: boolean;
+  hasSubTypes: boolean;
   isFree: boolean;
 }

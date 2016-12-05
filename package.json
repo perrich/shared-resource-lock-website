@@ -5,8 +5,7 @@
   "scripts": {
     "clean": "gulp clean",
     "build": "gulp build",
-    "start": "gulp serve",
-    "test": "karma start karma.conf.js --single-run"
+    "start": "gulp serve"
   },
   "keywords": [],
   "author": "",

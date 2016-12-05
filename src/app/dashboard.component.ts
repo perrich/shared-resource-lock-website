@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     if (!type.isFree) {
       classes.push("type-hold");
-    } else if (type.hasSubType) {
+    } else if (type.hasSubTypes) {
       classes.push("type-with-subtype");
     }
 

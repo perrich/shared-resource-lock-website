@@ -3,9 +3,14 @@ import { Type } from './type';
 import { Subtype } from './subtype';
 
 export class DashboardData {
+    // Resources of the selected type
     resources: Resource[] = [];
-    types: Type[] = [];
+
+    // Subtypes of the selected type
     subtypes: Subtype[] = [];
+
+    // all available types
+    types: Type[] = [];
 
     constructor(data: Resource[], selectedTypeName: string | null) {
         let resources: Resource[] = [];
@@ -18,32 +23,32 @@ export class DashboardData {
             if (types[resource.type] == null) {
                 let type = new Type();
                 type.name = resource.type;
-                type.hasSubType = false;
-                type.isFree = false;
+                type.hasSubTypes = false;
+                type.isFree = true;
 
                 types[resource.type] = type;
                 firstSubtypes[resource.type] = resource.subtype;
             }
 
             if (firstSubtypes[resource.type] != resource.subtype) {
-                types[resource.type].hasSubType = true;
+                types[resource.type].hasSubTypes = true;
             }
 
-            if (resource.user == null || resource.user == '') {
-                types[resource.type].isFree = true;
+            if (resource.user != null && resource.user != '') {
+                types[resource.type].isFree = false;
             }
 
             if (resource.type == selectedTypeName) {
                 if (subtypes[resource.subtype] == null) {
                     let subtype = new Subtype();
                     subtype.name = resource.subtype;
-                    subtype.isFree = false;
+                    subtype.isFree = true;
 
                     subtypes[resource.subtype] = subtype;
                 }
 
-                if (resource.user == null || resource.user == '') {
-                    subtypes[resource.subtype].isFree = true;
+                if (resource.user != null && resource.user != '') {
+                    subtypes[resource.subtype].isFree = false;
                 }
 
                 resources.push(resource);
