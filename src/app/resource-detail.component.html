@@ -1,14 +1,19 @@
 <h2><i class="fa fa-commenting-o" aria-hidden="true"></i>Resource details</h2>
 <div *ngIf="resource" class="resource-details">
-  <h3>"{{resource.name}}" details</h3>
-  <div><label>Type: </label>{{resource.type}}</div>
-  <div><label>Subtype: </label>{{resource.subtype}}</div>
-  <div><label>Name: </label>{{resource.name}}</div>
-  <div><label>Description: </label>{{resource.description}}</div>
-  <div *ngIf="resource.user"><label class="important">Used by: </label><span class="important">{{resource.user}}</span></div>
-  <div *ngIf="resource.user"><label>Since: </label>{{resource.date | date: 'dd/MM/yyyy'}} at {{resource.date | date: 'HH:mm:ss'}}</div>
-  <div *ngIf="!resource.user"><label>Comment: </label><textarea #myComment rows="10" cols="50">{{resource.comment}}</textarea></div>
-  <div *ngIf="resource.user"><label>Comment: </label><textarea #myComment rows="10" cols="50" disabled>{{resource.comment}}</textarea></div>
+  <div class="block">
+    <h3>Properties</h3>
+    <div class="row"><label>Name </label>{{resource.name}}</div>
+    <div class="row"><label>Type </label>{{resource.type}}</div>
+    <div class="row"><label>Subtype </label>{{resource.subtype}}</div>
+    <div class="row"><label>Description </label>{{resource.description}}</div>
+  </div>
+  <div class="block">
+    <h3>Holding Information</h3>
+    <div class="row" *ngIf="resource.user"><label class="important">Used by </label><span class="important">{{resource.user}}</span></div>
+    <div class="row" *ngIf="resource.user"><label>Since </label>{{resource.date | date: 'dd/MM/yyyy'}} at {{resource.date | date: 'HH:mm:ss'}}</div>
+    <div class="row" *ngIf="!resource.user"><label>Comment </label><textarea #myComment rows="10" cols="50">{{resource.comment}}</textarea></div>
+    <div class="row" *ngIf="resource.user"><label>Comment </label><textarea #myComment rows="10" cols="50" disabled>{{resource.comment}}</textarea></div>
+  </div>
   <button (click)="goBack()"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back</button>
   <button *ngIf="resource.user" (click)="free()"><i class="fa fa-unlock" aria-hidden="true"></i> Free</button>
   <button *ngIf="!resource.user" (click)="hold()"><i class="fa fa-lock" aria-hidden="true"></i> Hold</button>

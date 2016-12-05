@@ -6,7 +6,6 @@
 }
 
 h3 {
-	border-bottom: 1px solid #e0e0e0;
   margin-bottom: 20px;
   padding-bottom: 10px;
 }
@@ -20,6 +19,20 @@ h3 {
   vertical-align: top;
   width: 7em;
   font-weight: bold;
+}
+
+.resource-details .row {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.resource-details .block {
+  margin-top: 50px;
+}
+
+.resource-details .block:first-child {
+  margin-top: 0px;
 }
 
 .resource-details .important {
