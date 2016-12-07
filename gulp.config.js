@@ -29,8 +29,7 @@ module.exports = function () {
                 baseDir: './' + build.dev,
                 middleware: [
                     historyApiFallback(),
-                    proxy('/**/*.php', {target: 'http://lock.localhost/'}),
-                    proxy('/**/*.php/*', {target: 'http://lock.localhost/'})
+                    proxy(['/router.php', '/config.php'], {target: 'http://lock.localhost/'})
                 ]
             }
         }
