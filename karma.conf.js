@@ -62,6 +62,10 @@ module.exports = function(config) {
       { pattern: 'systemjs.config.js', included: false, watched: false },
       { pattern: 'systemjs.config.extras.js', included: false, watched: false },
 
+      
+      { pattern: 'node_modules/ng2-webstorage/bundles/core.umd.js', included: false, watched: false },
+      { pattern: 'node_modules/angular2-notifications/**/*.js', included: false, watched: false },
+
       'karma-test-shim.js', // optionally extend SystemJS mapping e.g., with barrels
 
       // transpiled application & spec code paths loaded via module imports

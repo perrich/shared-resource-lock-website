@@ -1,9 +1,7 @@
-import 'rxjs/observable/of';
 import 'rxjs/add/observable/timer';
-import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/catch';
 
 import { Injectable }              from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
@@ -28,11 +26,15 @@ export class ResourceService {
   constructor(private http: Http, private config:Config) {
     this.url = config.get('WS_baseUrl');  // URL to web api
     
-    // Refresh cache every x milliseconds if something has changed
-    Observable.timer(0, config.get('WS_refreshDelayMs'))
-      .subscribe((x) => {
-        this.fillCache().subscribe(a => a);
-      });
+    let delay = config.get('WS_refreshDelayMs');
+
+    if (delay > 100) {
+      // Refresh cache every x milliseconds if something has changed
+      Observable.timer(0, delay)
+        .subscribe((x) => {
+          this.fillCache().subscribe(a => a);
+        });
+    }
   }
   
   getResources() : Observable<Resource[]> {
@@ -80,9 +82,11 @@ export class ResourceService {
         // only update if changed
         if (response.status == 200 && response.text() != JSON.stringify(this.resources)) {
           this.resources = this.convert(response.json());
-          this.dataChange.next("resources");
+          this.dataChange.next('resources');
           return this.resources;
         }
+
+        throw new Error('Invalid response');
       })
       .catch(error => this.handleError(error))
       .share();
@@ -109,7 +113,6 @@ export class ResourceService {
   }
   
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
     return Promise.reject(error.message || error);
   }
 }
