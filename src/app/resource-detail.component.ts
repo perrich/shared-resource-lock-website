@@ -1,37 +1,38 @@
 import 'rxjs/add/operator/switchMap';
 import { ViewChild, ElementRef, Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Params }       from '@angular/router';
-import { Location }                     from '@angular/common';
-import { Subscription }                 from 'rxjs/Subscription';
-import { NotificationsService }         from 'angular2-notifications';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Location } from '@angular/common';
+import { Subscription } from 'rxjs/Subscription';
+import { NotificationsService } from 'angular2-notifications';
 
-import { Resource }        from './resource';
+import { Resource } from './resource';
+import { User } from './user';
 import { ResourceService } from './resource.service';
-import { UserService }     from './user.service';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'my-resource-detail',
   templateUrl: 'app/resource-detail.component.html',
-  styleUrls: [ 'app/resource-detail.component.css' ]
+  styleUrls: ['app/resource-detail.component.css']
 })
 export class ResourceDetailComponent implements OnInit, OnDestroy {
   resource: Resource;
   id: number | null;
-  @ViewChild('myComment') input: ElementRef; 
+  @ViewChild('myComment') input: ElementRef;
 
   private subscription: Subscription;
 
   constructor(
-    private resourceService: ResourceService, 
+    private resourceService: ResourceService,
     private userService: UserService,
     private route: ActivatedRoute,
     private location: Location,
     private notificationsService: NotificationsService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
-      this.id = +params['id'];            
+      this.id = +params['id'];
       this.subscription = this.resourceService.dataChange.subscribe(a => this.refresh());
       this.refresh();
     });
@@ -44,7 +45,7 @@ export class ResourceDetailComponent implements OnInit, OnDestroy {
   hold(): void {
     let user = this.userService.get();
 
-    if (user != null) {
+    if (this.isAValidUser(user)) {
       let resource = { ...this.resource };
       resource.comment = this.input.nativeElement.value;
       resource.user = user.name;
@@ -55,12 +56,16 @@ export class ResourceDetailComponent implements OnInit, OnDestroy {
   }
 
   free(): void {
-    let resource = { ...this.resource };
-    resource.description = this.resource.description;
-    resource.user = null;
-    resource.date = null;
-    resource.comment = null;
-    this.resourceService.update(resource).subscribe((isSuccessful: boolean) => isSuccessful ? this.goBack() : this.showError());
+    let user = this.userService.get();
+
+    if (this.isAValidUser(user)) {
+      let resource = { ...this.resource };
+      resource.description = this.resource.description;
+      resource.user = null;
+      resource.date = null;
+      resource.comment = null;
+      this.resourceService.update(resource).subscribe((isSuccessful: boolean) => isSuccessful ? this.goBack() : this.showError());
+    }
   }
 
   goBack(): void {
@@ -75,5 +80,14 @@ export class ResourceDetailComponent implements OnInit, OnDestroy {
     this.resourceService.getResource(this.id).subscribe(resource => {
       this.resource = resource
     });
+  }
+
+  private isAValidUser(user: User): boolean {
+    if (user == null || user.name == null || user.name.trim() == '') {
+      this.notificationsService.error("User Error", "Cannot update resource, you should fill your name first.");
+      return false;
+    }
+
+    return true;
   }
 }

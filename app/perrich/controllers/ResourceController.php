@@ -22,7 +22,7 @@ class ResourceController extends Controller
 	}
 	
 	public function updateResource($id)
-  {
+    {
 		$parameters = HttpHelper::getParameters();
 
 		if (!isset($parameters['type'])) {
@@ -61,6 +61,12 @@ class ResourceController extends Controller
 		$repository->save();
 		$locker->unlock();
 
+		if ($resource->user !== null) {
+			$this->log->addInfo('User "' . $resource->user . '" has hold resource #' . $id, ResourceController::fillLogDetails());
+		} else {
+			$this->log->addInfo('Resource #' . $id . ' has been freed', ResourceController::fillLogDetails());
+		}
+
 		return HttpHelper::jsonContent('{"state": "OK"}');
 	}
 	
@@ -75,10 +81,22 @@ class ResourceController extends Controller
 		}
 
 		return null;
-  }
+   }
 	
 	private static function defineErrorMessage($message)
 	{
-			return HttpHelper::jsonContent('{"state": "ERROR", "message": "' . $message . '"}');
-  }
+	    return HttpHelper::jsonContent('{"state": "ERROR", "message": "' . $message . '"}');
+    }
+
+	private static function fillLogDetails()
+	{
+	   $array = array();
+	   
+	   if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+	      $array['maybe_real_ip'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	   }
+	   $array['ip'] = $_SERVER['REMOTE_ADDR'];
+
+	   return $array;
+    }	
 }
