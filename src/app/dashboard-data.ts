@@ -24,7 +24,7 @@ export class DashboardData {
                 let type = new Type();
                 type.name = resource.type;
                 type.hasSubTypes = false;
-                type.isFree = true;
+                type.isFree = false;
 
                 types[resource.type] = type;
                 firstSubtypes[resource.type] = resource.subtype;
@@ -34,21 +34,21 @@ export class DashboardData {
                 types[resource.type].hasSubTypes = true;
             }
 
-            if (resource.user != null && resource.user != '') {
-                types[resource.type].isFree = false;
+            if (resource.user == null || resource.user == '') {
+                types[resource.type].isFree = true;
             }
 
             if (resource.type == selectedTypeName) {
                 if (subtypes[resource.subtype] == null) {
                     let subtype = new Subtype();
                     subtype.name = resource.subtype;
-                    subtype.isFree = true;
+                    subtype.isFree = false;
 
                     subtypes[resource.subtype] = subtype;
                 }
 
-                if (resource.user != null && resource.user != '') {
-                    subtypes[resource.subtype].isFree = false;
+                if (resource.user == null || resource.user == '') {
+                    subtypes[resource.subtype].isFree = true;
                 }
 
                 resources.push(resource);

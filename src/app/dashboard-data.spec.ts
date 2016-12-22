@@ -90,16 +90,64 @@ describe('DashboardData', function () {
     expect(data.subtypes[0].isFree).toEqual(true);
   });
   
-  it('should not return a free subtype if at least one resource is not free', () => {
+  it('should return a free subtype if at least one resource is free', () => {
     resources = [];
     resources.push(createResource(1, type, subtype));
     resources.push(createResource(2, type, subtype));
-    resources.push(createResource(3, type, subtype));
+    resources[1].user = "sample";
+    resources[1].date = new Date();
+    let data = new DashboardData(resources, type);
+
+    expect(data.subtypes[0].isFree).toEqual(true);
+  });
+  
+  it('should not return a free subtype if all resources are not free', () => {
+    resources = [];
+    resources.push(createResource(1, type, subtype));
+    resources.push(createResource(2, type, subtype));
+    resources[0].user = "sample";
+    resources[0].date = new Date();
     resources[1].user = "sample";
     resources[1].date = new Date();
     let data = new DashboardData(resources, type);
 
     expect(data.subtypes[0].isFree).toEqual(false);
+  });
+
+  
+  
+  it('should return a free type if all resources are free', () => {
+    resources = [];
+    resources.push(createResource(1, type, subtype));
+    resources.push(createResource(2, type, null));
+    resources.push(createResource(3, type, null));
+    let data = new DashboardData(resources, type);
+
+    expect(data.types[0].isFree).toEqual(true);
+  });
+  
+  it('should return a free type if at least one resource is free', () => {
+    resources = [];
+    resources.push(createResource(1, type, subtype));
+    resources.push(createResource(2, type, null));
+    resources[1].user = "sample";
+    resources[1].date = new Date();
+    let data = new DashboardData(resources, type);
+
+    expect(data.types[0].isFree).toEqual(true);
+  });
+  
+  it('should not return a free type if all resources are not free', () => {
+    resources = [];
+    resources.push(createResource(1, type, subtype));
+    resources.push(createResource(2, type, null));
+    resources[0].user = "sample";
+    resources[0].date = new Date();
+    resources[1].user = "sample";
+    resources[1].date = new Date();
+    let data = new DashboardData(resources, type);
+
+    expect(data.types[0].isFree).toEqual(false);
   });
 
   function createResource(id: number, type: string, subtype: string): Resource {
