@@ -59,9 +59,10 @@ class DataRepository
 	 */
 	public function updateResource($resource) {
 		foreach ($this->resources as $r){
-			if ($r->type == $resource->type && $r->name == $resource->name) {
+			if ($r->id == $resource->id) {
 				$r->user = $resource->user;
 				$r->date = $resource->date;
+				$r->comment = $resource->comment;
 				return true;
 			}
 		}
