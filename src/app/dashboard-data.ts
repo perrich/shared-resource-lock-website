@@ -2,14 +2,23 @@ import { Resource } from './resource';
 import { Type } from './type';
 import { Subtype } from './subtype';
 
+/**
+ * Configuration
+ */
 export class DashboardData {
-    // Resources of the selected type
+    /** 
+     * Resources of the selected type
+     */
     resources: Resource[] = [];
 
-    // Subtypes of the selected type
+    /** 
+     * Sub-types of the selected type
+     */
     subtypes: Subtype[] = [];
 
-    // all available types
+    /** 
+     * Available types
+     */
     types: Type[] = [];
 
     constructor(data: Resource[], selectedTypeName: string | null) {

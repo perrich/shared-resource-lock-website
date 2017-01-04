@@ -2,6 +2,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { Resource } from './resource';
 
+/**
+ * Filter resources by sub-type
+ * __Usage :__
+ *   allresources | resource_subtype : subtype
+ */
 @Pipe({
   name: 'resource_subtype',
   pure: false

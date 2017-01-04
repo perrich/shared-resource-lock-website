@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Http, Response } from '@angular/http';
 
+/**
+ * Configuration
+ */
 @Injectable()
 export class Config {
 
@@ -11,6 +14,9 @@ export class Config {
     constructor(private http: Http) {
     }
 
+    /**
+     * Load the configuration
+     */
     load() {
         return new Promise((resolve, reject) => {
             this.http.get('/config.php')
@@ -26,14 +32,23 @@ export class Config {
         });
     }
 
+    /**
+     * Get a configuration by key
+     */
     get(key: any) {
         return this.config[key];
     }
 
+    /**
+     * Add a custom configuration
+     */
     setCustom(key: any, val: any) {
         this.configCustom[key] = val;
     }
 
+    /**
+     * Get a custom configuration by key
+     */
     getCustom(key: any) {
         return this.configCustom[key];
     }
