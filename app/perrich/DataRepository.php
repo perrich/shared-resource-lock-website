@@ -55,7 +55,6 @@ class DataRepository
 	 *
 	 * @param $resource The resource to update
 	 * @return boolean
-     * @throws FileException If the file could not be checked.
 	 */
 	public function updateResource($resource) {
 		foreach ($this->resources as $r){
@@ -73,13 +72,21 @@ class DataRepository
 	/**
 	 * Load resources
 	 *
-	 * @return boolean
-     * @throws FileException If the file could not be checked.
+     * @throws RepositoryException if the file is empty or corrupted.
 	 */
 	public function load() {
 		$str = stream_get_contents($this->handle);
+		
+		if ($str === null) {
+			throw RepositoryException::create('Empty data.');
+		}
+
 		$this->resources = array();
 		$objs = json_decode($str, false, 512);
+
+		if ($objs === null) {
+			throw RepositoryException::create('Unable to understand JSON.');
+		}
 		
 		foreach ($objs as $o) {
 			$resource = new Resource();
@@ -91,17 +98,30 @@ class DataRepository
 	/**
 	 * Load resources
 	 *
-	 * @return boolean
-     * @throws FileException If the file could not be checked.
+     * @throws RepositoryException If the file could not be saved.
 	 */
 	public function save() {
 		rewind($this->handle);
 		$str = json_encode($this->resources);
-		$result = fwrite($this->handle, $str) !== false;
 		
-		fflush($this->handle);
-		ftruncate($this->handle, ftell($this->handle));
+		if ($str === false) {
+			throw RepositoryException::create('Unable to encode JSON.');
+		}
+
+		$result = fwrite($this->handle, $str);
+		if ($result === false) {
+			throw RepositoryException::create('Unable to save data.');
+		}
+
+		$result = fflush($this->handle);
+		if ($result === false) {
+			throw RepositoryException::create('Unable to save data.');
+		}
+
+		$result = ftruncate($this->handle, ftell($this->handle));
 		
-		return $result;
+		if ($result === false) {
+			throw RepositoryException::create('Unable to save data.');
+		}
 	}	
 }

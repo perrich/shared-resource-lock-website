@@ -2,6 +2,7 @@
 namespace Perrich\Controllers;
 
 use Perrich\DataRepository;
+use Perrich\RepositoryException;
 use Perrich\FileLocker;
 use Perrich\HttpHelper;
 
@@ -12,11 +13,20 @@ class ResourceController extends Controller
 		$locker = ResourceController::getLocker(false);
 		if ($locker === null) {
 			http_response_code(409);
-			return 'Locked repository, please retry later"}';
+			return 'Locked repository, please retry later';
 		}
-
-		$repository = new DataRepository($locker->getHandle());
-		$repository->load();
+		
+		try
+		{
+			$repository = new DataRepository($locker->getHandle());
+			$repository->load();
+		}
+		catch(RepositoryException $re)
+		{
+			$this->log->error('Resource cannot be read: ' . $re->getMessage());
+			http_response_code(404);
+			return 'Repository not found';
+		}
 		$locker->unlock();
 		return HttpHelper::jsonContent($repository->getResources());
 	}
@@ -31,16 +41,40 @@ class ResourceController extends Controller
 
 		$locker = ResourceController::getLocker(true);
 		if ($locker === null) {
-			return ResourceController::defineErrorMessage('Locked repository, please retry later"}');
+			return ResourceController::defineErrorMessage('Locked repository, please retry later');
 		}
 
+		try
+		{
+			$resource = $this->saveResource($locker, $id, $parameters);
+			$locker->unlock();
+
+			if ($resource->user !== null) {
+				$this->log->addInfo('User "' . $resource->user . '" has hold resource #' . $id, ResourceController::fillLogDetails());
+			} else {
+				$this->log->addInfo('Resource #' . $id . ' has been freed', ResourceController::fillLogDetails());
+			}
+		}
+		catch(RepositoryException $re)
+		{
+			$this->log->error('Resource cannot be saved: ' . $re->getMessage());
+			
+			$locker->unlock();
+			return ResourceController::defineErrorMessage('Repository cannot save resource');
+		}
+
+		return HttpHelper::jsonContent('{"state": "OK"}');
+	}
+
+	private function saveResource($locker, $id, $parameters)
+	{
 		$repository = new DataRepository($locker->getHandle());
 		$repository->load();
 
 		$resource = $repository->getResource($id);
 		if ($resource === null) {
 			$locker->unlock();
-			return ResourceController::defineErrorMessage('Unknown resource"}');
+			return ResourceController::defineErrorMessage('Unknown resource');
 		}
 
 		if ($resource->user !== null && isset($parameters['user'])) {
@@ -59,15 +93,8 @@ class ResourceController extends Controller
 		$repository->updateResource($resource);
 
 		$repository->save();
-		$locker->unlock();
 
-		if ($resource->user !== null) {
-			$this->log->addInfo('User "' . $resource->user . '" has hold resource #' . $id, ResourceController::fillLogDetails());
-		} else {
-			$this->log->addInfo('Resource #' . $id . ' has been freed', ResourceController::fillLogDetails());
-		}
-
-		return HttpHelper::jsonContent('{"state": "OK"}');
+		return $resource;	
 	}
 	
 	private static function getLocker($needWrite)

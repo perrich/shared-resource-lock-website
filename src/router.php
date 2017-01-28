@@ -57,7 +57,8 @@ catch(Phroute\Phroute\Exception\HttpMethodNotAllowedException $e) {
 	header($e->getMessage());
 }
 catch(Exception $e) {
-	echo $e;
+	$log->error($_SERVER['REQUEST_URI'] . ' => '. $e->getMessage()); 
+    $log->error('Stack Trace: '. $e->getTraceAsString());
 	http_response_code(500);
 }
 ?>

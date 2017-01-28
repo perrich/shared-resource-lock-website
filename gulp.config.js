@@ -30,7 +30,10 @@ module.exports = function () {
                 middleware: [
                     historyApiFallback(),
                     proxy(['/router.php', '/config.php'], {target: 'http://lock.localhost/'})
-                ]
+                ],
+                routes: {
+                        '/node_modules': 'node_modules',
+                }
             }
         }
     };

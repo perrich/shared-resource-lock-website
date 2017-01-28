@@ -47,7 +47,11 @@ gulp.task('system-build', ['tsc'], () => {
   var builder = new SystemBuilder();
 
   return builder.loadConfig('systemjs.config.js')
-    .then(() => builder.buildStatic('app', config.dev + '/js/bundle.js', { sourceMaps: true }));
+    .then(() => builder.buildStatic('app', config.dev + '/js/bundle.js', { 
+      sourceMaps: true,
+      production: false,
+      rollup: false
+    }));
 });
 
 gulp.task('tsc', () => {
@@ -154,7 +158,7 @@ gulp.task('build', (done) => {
 
 gulp.task('dev-ts', ['system-build'], () => {
   return gulp.src(config.app + '**/*.ts')
-    .pipe(gulp.dest(config.dev + '/' + config.app));
+    .pipe(gulp.dest(config.dev + '/' + config.temp));
 });
 
 gulp.task('default', ['build']);
