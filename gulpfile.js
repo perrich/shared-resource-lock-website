@@ -169,16 +169,16 @@ gulp.task('copy', () => {
 });
 
 gulp.task('minify', () => {
-  /*
-  not works for bundle.js !
-  */
   var js = gulp.src(config.dist + '/js/shims.js')
+    .pipe(jsMinify())
+    .pipe(gulp.dest(config.dist + '/js/'));    
+  var js2 = gulp.src(config.dist + '/js/bundle.js')
     .pipe(jsMinify())
     .pipe(gulp.dest(config.dist + '/js/'));
   var css = gulp.src(config.dist + '/css/styles.css')
     .pipe(cssMinify())
     .pipe(gulp.dest(config.dist + '/css/'));
-  return merge(js, css);
+  return merge(js, js2, css);
 });
 
 gulp.task('dist', ['build'], (cb) => {
