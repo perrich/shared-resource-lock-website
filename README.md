@@ -10,9 +10,9 @@ Provide a way to manage limited resource access by creating an easy lock mechani
 * Gulp script is used to build and package the Web site 
 
 ## Prerequisites
-* Node.JS
-* Gulp
-* PHP
+* Node.JS (npm/gulp)
+* Gulp (build)
+* PHP (server side shared management)
 
 
 ## How to test it?
@@ -30,5 +30,6 @@ You only need 4 steps :
  * _dist_
  * _vendor_
 2. modify the _app/config.json_ file
-3. _dist_ should be the web site root directory
-4. that's all!
+3. modify the _app/db.json_ file to define your resources
+4. _dist_ should be the web site root directory
+5. that's all!
