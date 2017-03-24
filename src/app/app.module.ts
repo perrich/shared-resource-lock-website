@@ -42,8 +42,7 @@ import { UserFormComponent }   from './user-form.component';
     Ng2Webstorage
   ],
   declarations: [
-    ResourcesPipe,
-    
+    ResourcesPipe,    
     AppComponent,
     DashboardComponent,
     ResourceDetailComponent,
