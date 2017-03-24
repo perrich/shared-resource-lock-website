@@ -108,18 +108,18 @@ class DataRepository
 			throw RepositoryException::create('Unable to encode JSON.');
 		}
 
+		$result = ftruncate($this->handle, 0);
+		
+		if ($result === false) {
+			throw RepositoryException::create('Unable to save data.');
+		}
+
 		$result = fwrite($this->handle, $str);
 		if ($result === false) {
 			throw RepositoryException::create('Unable to save data.');
 		}
 
 		$result = fflush($this->handle);
-		if ($result === false) {
-			throw RepositoryException::create('Unable to save data.');
-		}
-
-		$result = ftruncate($this->handle, ftell($this->handle));
-		
 		if ($result === false) {
 			throw RepositoryException::create('Unable to save data.');
 		}
