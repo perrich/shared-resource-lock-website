@@ -10,6 +10,7 @@ export class AppComponent {
     public options = {
         position: ["bottom", "right"],
         timeOut: 5000,
-        lastOnBottom: true
+        lastOnBottom: true,
+        showProgressBar: false
     }
- }
+}

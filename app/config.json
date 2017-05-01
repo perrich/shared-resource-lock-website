@@ -1,5 +1,20 @@
 {
 	"logfile": "log.txt",
+	"databasefileRelativePath": "db.json",
 	"WS_refreshDelayMs": 5000,
-	"WS_baseUrl": "/router.php/resources"
+	"WS_baseUrl": "/router.php/resources",
+	"myOldResourcesCheckDelayInMinutes": 2, 
+	"smtp": {
+		"host": "localhost",
+		"port": 25,
+		"security": null,
+		"login": null,
+		"password": null
+	},
+	"warning_mail": {
+		"maxHoldingDelayInHours": 24, 
+		"from": "shared-resource-lock-website@sample.com",
+		"to": "you@sample.com",
+		"subject": "Notification from shared-resource-lock-website"
+	}
 }

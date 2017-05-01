@@ -41,7 +41,7 @@ class Resource implements \JsonSerializable
     public $user;
     
     /**
-	 * The descriptiob
+	 * The description
 	 *
      * @return string
      */

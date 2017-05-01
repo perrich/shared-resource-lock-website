@@ -5,12 +5,13 @@ use Perrich\DataRepository;
 use Perrich\RepositoryException;
 use Perrich\FileLocker;
 use Perrich\HttpHelper;
+use Perrich\Utilities;
 
 class ResourceController extends Controller
 {
 	public function getResources()
 	{
-		$locker = ResourceController::getLocker(false);
+		$locker = Utilities::getLocker($this->getDataPath(), false);
 		if ($locker === null) {
 			http_response_code(409);
 			return 'Locked repository, please retry later';
@@ -39,7 +40,7 @@ class ResourceController extends Controller
 			return ResourceController::defineErrorMessage('Unsupported request');
 		}
 
-		$locker = ResourceController::getLocker(true);
+		$locker = Utilities::getLocker($this->getDataPath(), true);
 		if ($locker === null) {
 			return ResourceController::defineErrorMessage('Locked repository, please retry later');
 		}
@@ -94,21 +95,13 @@ class ResourceController extends Controller
 
 		$repository->save();
 
-		return $resource;	
+		return $resource;
 	}
-	
-	private static function getLocker($needWrite)
-	{
-		$locker = new FileLocker(__DIR__ .'/../../db.json');
-	
-		if (!$locker->isLocked()) {
-			if ($needWrite === false || $locker->lock()) {
-				return $locker;
-			}
-		}
 
-		return null;
-   }
+	private function getDataPath()
+	{
+		return __DIR__ .'/../../' . $this->config->get('databasefileRelativePath');
+	}
 	
 	private static function defineErrorMessage($message)
 	{
@@ -125,5 +118,5 @@ class ResourceController extends Controller
 	   $array['ip'] = $_SERVER['REMOTE_ADDR'];
 
 	   return $array;
-    }	
+    }
 }

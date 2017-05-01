@@ -1,6 +1,6 @@
 {
   "name": "shared-resource-lock-website",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A shared resource locking management website",
   "scripts": {
     "clean": "gulp clean",
@@ -29,14 +29,14 @@
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/platform-server": "^4.0.0",
     "@angular/router": "^4.0.0",
-    "angular2-notifications": "^0.4.49",
+    "angular2-notifications": "^0.7.0",
     "core-js": "^2.4.1",
     "ng2-webstorage": "^1.4.1",
     "reflect-metadata": "^0.1.8",
     "rxjs": "5.0.3",
     "systemjs": "0.19.45",
     "typescript": "^2.2.1",
-    "zone.js": "^0.7.6"
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "@types/core-js": "^0.9.34",

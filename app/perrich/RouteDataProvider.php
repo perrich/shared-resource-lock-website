@@ -16,6 +16,7 @@ class RouteDataProvider
 	
 	private function addRoutes($routeCollector)
 	{
+		$routeCollector->get('/mail/', ['\\Perrich\\Controllers\\MailController','createMail']);
 		$routeCollector->get('/resources/', ['\\Perrich\\Controllers\\ResourceController','getResources']);
 		$routeCollector->put('/resources/{id}', ['\\Perrich\\Controllers\\ResourceController','updateResource']);
 	}
@@ -28,14 +29,14 @@ class RouteDataProvider
 	public function provideData()
 	{
 		if (file_exists($this->cachePath)) {
-            $dispatchData = unserialize(file_get_contents($this->cachePath));
-        } else {
+			$dispatchData = unserialize(file_get_contents($this->cachePath));
+		} else {
 			$routeCollector = new RouteCollector();
 			$this->addRoutes($routeCollector);
 			$dispatchData = $routeCollector->getData();
 			file_put_contents($this->cachePath, serialize($dispatchData));
 		}
 		
-        return $dispatchData;
+		return $dispatchData;
 	}
 }

@@ -12,51 +12,55 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { BrowserModule }             from '@angular/platform-browser';
-import { FormsModule }               from '@angular/forms';
-import { HttpModule }                from '@angular/http';
-import { Ng2Webstorage }             from 'ng2-webstorage';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { Ng2Webstorage } from 'ng2-webstorage';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { Config } from './config'
-import { ResourceService }  from './resource.service';
-import { UserService }  from './user.service';
+import { ResourceService } from './resource.service';
+import { UserService } from './user.service';
 
 
 import { ResourcesPipe } from './resource.pipe';
 
-import { AppComponent }  from './app.component';
-import { DashboardComponent }   from './dashboard.component';
-import { ResourceDetailComponent }   from './resource-detail.component';
-import { UserFormComponent }   from './user-form.component';
+import { AppComponent } from './app.component';
+import { DashboardComponent } from './dashboard.component';
+import { ResourceDetailComponent } from './resource-detail.component';
+import { UserFormComponent } from './user-form.component';
 
 @NgModule({
-  imports: [     
+  imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     SimpleNotificationsModule,
     Ng2Webstorage
   ],
   declarations: [
-    ResourcesPipe,    
+    ResourcesPipe,
     AppComponent,
     DashboardComponent,
     ResourceDetailComponent,
     UserFormComponent
   ],
-  providers: [ 
+  providers: [
     ResourceService,
     UserService,
     Config,
-    { provide: APP_INITIALIZER,
+    {
+      provide: APP_INITIALIZER,
       useFactory: (config: Config) => () => config.load(),
       deps: [Config],
-      multi: true }
+      multi: true
+    }
   ],
-  bootstrap: [ AppComponent ]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -8,7 +8,9 @@ $conf = Config::load(__DIR__ . '/../app/config.json');
 
 $jsConfiguration = [
     'WS_refreshDelayMs' => $conf->get('WS_refreshDelayMs'),
-    'WS_baseUrl' => $conf->get('WS_baseUrl')
+    'WS_baseUrl' => $conf->get('WS_baseUrl'),
+	'maxHoldingDelayInHours' => $conf->get('warning_mail.maxHoldingDelayInHours'),
+	'myOldResourcesCheckDelayInMinutes' => $conf->get('myOldResourcesCheckDelayInMinutes'),
 ];
 
 // Allow from any origin
