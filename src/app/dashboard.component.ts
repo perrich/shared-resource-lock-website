@@ -74,25 +74,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private refresh(): void {
     this.resourceService.getResources().subscribe(data => {
       this.dashboardData = new DashboardData(data, this.selectedTypeName);
-      this.checkMyOldResources(data);
+      this.checkMyOldResourcesIfNeeded();
     });
   }
 
-  private checkMyOldResources(resources: Resource[]): void {
+  private checkMyOldResourcesIfNeeded(): void {
     let minDate = new Date();
     minDate.setMinutes(minDate.getMinutes() - this.config.get('myOldResourcesCheckDelayInMinutes'));
 
     if (this.lastMyOldResourcesCheck == null || this.lastMyOldResourcesCheck < minDate) {
-      let olds = this.resourceService.getOldResources(this.userService.get() != null ? this.userService.get().name : '');
-      if (olds.length == 1) {
-        let current = olds[0];
-
-        this.notificationsService.alert("Very old lock", "Seems that you have a very old lock (" + current.type + (current.subtype !== null ? "/" + current.subtype : "") + "/" + current.name + "), please free or renew it.");
-      } else if (olds.length > 1) {
-        this.notificationsService.alert("Very old lock", "Seems that you have " + olds.length + " very old locks, please free or renew them.");
-      }
-
+      this.checkMyOldResources();
       this.lastMyOldResourcesCheck = new Date();
+    }
+  }
+
+  private checkMyOldResources(): void {
+    let olds = this.resourceService.getOldResources(this.userService.get() != null ? this.userService.get().name : '');
+    if (olds.length == 1) {
+      let current = olds[0];
+      this.notificationsService.alert("Very old lock", "Seems that you have a very old lock (" + current.type + (current.subtype !== null ? "/" + current.subtype : "") + "/" + current.name + "), please free or renew it.");
+    } else if (olds.length > 1) {
+      this.notificationsService.alert("Very old lock", "Seems that you have " + olds.length + " very old locks, please free or renew them.");
     }
   }
 }
