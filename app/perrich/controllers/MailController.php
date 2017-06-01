@@ -99,7 +99,7 @@ class MailController extends Controller
 		$mail->setFrom($this->config->get('warning_mail.from'));
 		$mail->addAddress($this->config->get('warning_mail.to'));
 		$mail->isHTML(true);
-
+		$mail->CharSet = 'UTF-8';
 		$mail->Subject = $this->config->get('warning_mail.subject');
 		$mail->Body = $message;
 
@@ -114,7 +114,11 @@ class MailController extends Controller
 	private static function getHtmlHeader()
 	{
 		return '
+		<!DOCTYPE html>
 		<html>
+		<head>
+			<meta charset="utf-8" />
+		</head>
 		<body>
 		<b>List of all old locks, please check them:</b>
 		<ul>
