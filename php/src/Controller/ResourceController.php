@@ -86,7 +86,7 @@ class ResourceController
 		return Utils::defineOkMessage();
     }
     
-    public function check() : Response
+    public function check(MailAlert $alert) : Response
     {
 		$repository = $this->service->LoadRepositoryOnly();
 
@@ -98,14 +98,13 @@ class ResourceController
 			file_get_contents(__DIR__.'/../../config/mailalert.yaml')
 		);
 
-		$alert = new MailAlert();
-		$body = $alert->prepareResourceCheckMessage($repository, $config);
+		$issues = $alert->prepareResourceCheckMessage($repository, $config);
 		
-		if ($body === '') {
+		if (count($issues) === 0) {
 			throw new ProcessingException(ProcessingException::TEXT, 'Nothing to send');
 		}
 
-		if (!$alert->send($this->mailer, $config['resourceCheckMessage'], $body)) {
+		if (!$alert->send($this->mailer, $config['resourceCheckMessage'], $issues)) {
 			throw new ProcessingException(ProcessingException::TEXT, 'Email cannot be sent');
 		}
 

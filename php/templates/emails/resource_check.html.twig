@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+		<b>List of all old locks, please check them:</b>
+        <ul>
+        {% for issue in issues %}
+            <li>{{issue.type}}
+            {% if issue.subtype %} - {{issue.subtype}} {% endif %}
+            - {{issue.name}} (user: {{issue.user}})
+            </li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
