@@ -1,0 +1,5 @@
+resourceCheckMessage: 
+  maxHoldingDelayInHours: 24 
+  from: "shared-resource-lock-website@sample.com"
+  to: "you@sample.com"
+  subject: "Notification from shared-resource-lock-website"

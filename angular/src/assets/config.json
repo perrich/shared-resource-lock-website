@@ -1,0 +1,6 @@
+{
+  "WS_refreshDelayMs": 5000,
+  "WS_baseUrl": "http://localhost:8000/api",
+  "maxHoldingDelayInHours": 24,
+  "myOldResourcesCheckDelayInMinutes": 2
+}

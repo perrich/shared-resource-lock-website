@@ -1,0 +1,28 @@
+<div class="block" *ngIf="resource">
+    <h2><i class="fa fa-commenting-o" aria-hidden="true"></i>Resource details</h2>
+  <div class="row">
+    <label>Type </label>
+    <select id="Type" #Id="ngModel" class="hideLabel form-control" [(ngModel)]="resource.type" name="Type">
+      <option [ngValue]="name" *ngFor="let name of typeList">
+        {{name}}
+      </option>
+    </select>
+  </div>
+  <div class="row">
+    <label>Subtype </label>
+    <select id="SubType" #Id="ngModel" class="hideLabel form-control" [(ngModel)]="resource.subtype" name="SubType">
+      <option [ngValue]="name" *ngFor="let name of subtypeList">
+        {{name}}
+      </option>
+    </select>
+  </div>
+  <div class="row">
+      <label>Name </label>
+      <input type="text" [(ngModel)]="resource.name" />
+    </div>
+  
+  <button (click)="delete()">
+    <i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
+  <button (click)="close()">
+    <i class="fa fa-close" aria-hidden="true"></i> Close</button>
+</div>

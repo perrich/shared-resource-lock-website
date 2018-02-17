@@ -1,0 +1,29 @@
+index:
+    path: /
+    controller: App\Controller\MainController::index
+list:
+    path: /api/
+    controller: App\Controller\ResourceController::list
+update:
+    path: /api/{id}
+    controller: App\Controller\ResourceController::update
+    requirements:
+        id: '\d+'
+    methods: [PUT]
+check:
+    path: /api/check/
+    controller: App\Controller\ResourceController::check
+configure:
+    path: /api/configure/
+    controller: App\Controller\ResourceController::configure
+    methods: [PUT]
+lock:
+    path: /api/lock/
+    controller: App\Controller\ResourceController::lock
+unlock:
+    path: /api/unlock/{force}
+    controller: App\Controller\ResourceController::unlock
+    defaults:
+        force: null
+    requirements:
+        force: 'force'

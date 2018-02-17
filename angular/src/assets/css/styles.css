@@ -1,0 +1,91 @@
+.wrapper {
+  flex: 1 1 auto;
+}
+
+#container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  min-height: 4em;
+  background-color: #369;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+footer {
+  border-top: 1px solid #ccc;
+  padding: 5px;
+  text-align: center;
+}
+
+h1 {
+  color: white;
+  font-size: 22pt;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  background-image: url('../images/logo.png');
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left: 2.5em;
+  margin: 0;
+  font: Tahoma, Lucida Sans, sans-serif;
+}
+
+h2 {
+  font-size: 20pt;
+  padding-left: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  background-color: #fbfbfb;
+  color: #333;
+  margin: 0;
+  margin-bottom: 0.8em;
+  min-width: 600px;
+  border-bottom: 1px solid #eee;
+  font: Tahoma, Lucida Sans, sans-serif;
+}
+
+h2 i {
+  margin-right: 0.5em;
+}
+
+h3 i {
+  margin-right: 0.5em;
+}
+
+h4 i {
+  margin-right: 0.5em;
+}
+
+h3 {
+  font-size: 16pt;
+  margin: 0;
+  margin-bottom: 1em;
+  font: Tahoma, Lucida Sans, sans-serif;
+}
+
+h4 {
+  font-size: 13pt;
+  margin: 0;
+  margin-bottom: 1em;
+  font: Tahoma, Lucida Sans, sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  margin: 0;
+}
+
+* {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12pt;
+}

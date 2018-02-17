@@ -1,0 +1,16 @@
+<a (click)="onSelect(null)" class="addResource">
+  <i class="fa fa-plus" aria-hidden="true"></i> Add a new resource</a>
+<ul class="resources">
+  <li *ngFor="let resource of (resources | sorted_resource)" [class.selected]="resource === selectedResource" (click)="onSelect(resource)">
+    <div>
+      <i class="fa fa-cube" aria-hidden="true"></i> {{resource.name}} (
+      <i>{{resource.type}}</i> / {{resource.subtype}})
+    </div>
+  </li>
+</ul>
+
+
+<button (click)="save()" [ngClass]="{disabled : isEmpty}" [disabled]="isEmpty">
+  <i class="fa fa-save" aria-hidden="true"></i> Save all configuration</button>
+
+<app-configure-form [resource]=selectedResource (Closed)="Closed($event)" (Deleted)="Deleted($event)"></app-configure-form>
