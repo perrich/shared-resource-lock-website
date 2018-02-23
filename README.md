@@ -23,7 +23,7 @@ You only need 4 steps :
 
 1. Run "composer install" in the _php_ folder.
 2. Run "npm install" in the _angular_ folder
-3. Edit the _public/assets/config.json_ to set the right URLs of the webservice
+3. Edit the _angular/assets/config.json_ to set the right URLs of the webservice
 4. Run "php -S localhost:8000 -t public/" from _php_ folder
 5. Run "ng serve --open" from _angular_ folder
 
