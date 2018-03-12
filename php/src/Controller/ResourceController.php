@@ -11,13 +11,15 @@ use App\Utils\MailAlert;
 use App\Utils\Utils;
 use App\Service\ResourceService;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Yaml\Yaml;
 
-class ResourceController
+class ResourceController extends Controller
 {
 	private $logger;
 	private $mailer;
@@ -33,6 +35,11 @@ class ResourceController
 		$this->session->start();
 	}
 
+    /**
+     * @Route("/api/", 
+	 *     name="Get all ressources"
+	 * )
+     */
     public function list() : Response
     {
 		$repository = $this->service->LoadRepositoryOnly();
@@ -44,6 +51,13 @@ class ResourceController
 		return new JsonResponse($repository->getResources());
 	}
 
+    /**
+     * @Route("/api/{id}", 
+	 *     name="Update a ressource lock", 
+	 *     requirements={"id"="\d+"}, 
+	 *     methods={"PUT"}
+	 * )
+     */
     public function update(int $id, Request $request) : Response
     {
 		$data = json_decode($request->getContent());
@@ -86,6 +100,11 @@ class ResourceController
 		return Utils::defineOkMessage();
     }
     
+    /**
+     * @Route("/api/check/", 
+	 *     name="Check for too old lock"
+	 * )
+     */
     public function check(MailAlert $alert) : Response
     {
 		$repository = $this->service->LoadRepositoryOnly();
@@ -101,7 +120,7 @@ class ResourceController
 		$issues = $alert->prepareResourceCheckMessage($repository, $config);
 		
 		if (count($issues) === 0) {
-			throw new ProcessingException(ProcessingException::TEXT, 'Nothing to send');
+			throw new ProcessingException(ProcessingException::TEXT, 'Nothing to send, everything is ok.');
 		}
 
 		if (!$alert->send($this->mailer, $config['resourceCheckMessage'], $issues)) {
@@ -109,8 +128,13 @@ class ResourceController
 		}
 
 		return new Response('OK');
-    }
-    
+    }    
+	
+    /**
+     * @Route("/api/lock/",
+	 *     name="Lock the configuration"
+	 * )
+     */
     public function lock() : Response
     {
 		$globalRepository = $this->service->getGlobalRepository();
@@ -120,7 +144,14 @@ class ResourceController
 
 		return Utils::defineOkMessage();
 	}
-	
+		
+    /**
+     * @Route("/api/unlock/{force}", 
+	 *     name="Unlock the configuration", 
+	 *     requirements={"force"="force"},
+     *     defaults={"force": null}
+	 * )
+     */
     public function unlock($force) : Response
     {
 		$isForced = $force === 'force';
@@ -136,6 +167,12 @@ class ResourceController
 		return Utils::defineOkMessage();
     }
 
+    /**
+     * @Route("/api/configure/", 
+	 *     name="Update the configuration (available ressources)", 
+	 *     methods={"PUT"}
+	 * )
+     */
     public function configure(Request $request) : Response
     {
 		$globalRepository = $this->service->getGlobalRepository();
