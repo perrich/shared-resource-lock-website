@@ -40,15 +40,21 @@ class ResourceController extends Controller
 	 *     name="Get all ressources"
 	 * )
      */
-    public function list() : Response
+    public function list(Request $request) : Response
     {
+		$response = new JsonResponse();
+		$response->setLastModified($this->service->getLastChangeDate());
+		if ($response->isNotModified($request)) {
+			return $response;
+		}
+
 		$repository = $this->service->LoadRepositoryOnly();
 
 		if ($repository === null) {
 			throw new ProcessingException(ProcessingException::TEXT, 'Repository not found');
 		}
-
-		return new JsonResponse($repository->getResources());
+		$response->setData($repository->getResources());
+		return $response;
 	}
 
     /**

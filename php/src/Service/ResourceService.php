@@ -45,6 +45,15 @@ class ResourceService
 		return $repository;
 	}
 
+	public function getLastChangeDate() : \Datetime
+	{
+		$timestamp = @filemtime($this->getDataPath());
+		if ($timestamp === false) {
+			return new \DateTime();
+		}
+		return new \DateTime('@' . $timestamp );
+	}
+
 	public function saveResource(FileLocker $locker, int $id, Resource $request) : Resource
 	{
 		$repository = new DataRepository($locker->getHandle());
